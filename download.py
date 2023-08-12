@@ -44,3 +44,11 @@ if __name__ == "__main__":
             print(f"El archivo MP3 se encuentra en: {mp3_file}")
         else:
             print("No se pudo descargar el video o convertirlo a MP3.")
+            
+    '''
+    Añadir lo siguiente:
+    var_regex = re.compile(r"^\$*\w+\W")
+    A la linea 30 del archivo cipher.py de pytube
+    
+    pip install -r requirements.txt
+    '''

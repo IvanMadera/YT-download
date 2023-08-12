@@ -1,2 +1,4 @@
 /venv
+/musica
 *.mp4
+main.py
