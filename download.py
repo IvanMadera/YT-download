@@ -35,7 +35,7 @@ def download_youtube_audio(url, output_path):
 if __name__ == "__main__":
     youtube_urls = input("🎵 Ingresa los enlaces de YouTube separados por espacios: ")
     urls = youtube_urls.split()
-    output_folder = 'musica3'
+    output_folder = 'musica'
     os.makedirs(output_folder, exist_ok=True)
 
     for yt_url in urls:
