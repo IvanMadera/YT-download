@@ -165,7 +165,7 @@ if __name__ == "__main__":
         print(f"❌ Error: El archivo '{links_file}' está vacío.")
         exit(1)
 
-    output_folder = 'musica'
+    output_folder = 'musica4'
     os.makedirs(output_folder, exist_ok=True)
 
     print(f"🎵 Se encontraron {len(urls)} enlace(s) para descargar.")
