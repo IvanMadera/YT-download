@@ -6,8 +6,9 @@ from yt_dlp import YoutubeDL
 
 def _format_title(title):
     """Formatea el título de YouTube para un nombre de archivo limpio."""
-    # Eliminar emojis (cualquier carácter Unicode fuera del rango ASCII)
-    title = ''.join(char for char in title if ord(char) < 128 or char in ' \t\n')
+    # Eliminar emojis pero preservar caracteres acentuados
+    # Mantener caracteres ASCII, espacios, tabulaciones, saltos de línea y letras acentuadas (U+0080-U+017F)
+    title = ''.join(char for char in title if ord(char) < 128 or (ord(char) >= 0x0100 and ord(char) <= 0x017F) or char in ' \t\n¡¿áéíóúñÁÉÍÓÚÑ')
 
     # Preservar "/" si existe (caso especial: artista / canción)
     parts = title.split('/')
@@ -29,23 +30,6 @@ def _format_title(title):
 
     # Unir las partes con " - " (para que sea válido en nombres de archivo)
     return ' - '.join(formatted_parts)
-
-
-def _format_filename(filename):
-    """Formatea el nombre del archivo de forma más legible."""
-    # Eliminar extensión temporal si existe
-    name = os.path.splitext(filename)[0]
-
-    # Reemplazar caracteres especiales comunes por espacios
-    name = re.sub(r'[_\-]+', ' ', name)
-    # Eliminar caracteres especiales restantes
-    name = re.sub(r'[^\w\s]', '', name)
-    # Eliminar espacios múltiples
-    name = re.sub(r'\s+', ' ', name).strip()
-    # Capitalizar cada palabra
-    name = ' '.join(word.capitalize() for word in name.split())
-
-    return name
 
 
 class YTDLPLogger:
@@ -144,7 +128,9 @@ def download_youtube_audio(url, output_path):
     except Exception as e:
         print(f"\n❌ Error al procesar {url}: {e}")
         return False, None
-if __name__ == "__main__":
+
+def main():
+    """Función principal que ejecuta el proceso de descarga"""
     # Verificar dependencias antes de iniciar
     if shutil.which('ffmpeg') is None:
         print("⚠️ ffmpeg no encontrado en PATH — la conversión a MP3 fallará.")
@@ -159,13 +145,13 @@ if __name__ == "__main__":
             urls = [line.strip() for line in f if line.strip()]
     except FileNotFoundError:
         print(f"❌ Error: El archivo '{links_file}' no existe.")
-        exit(1)
+        return
 
     if not urls:
         print(f"❌ Error: El archivo '{links_file}' está vacío.")
-        exit(1)
+        return
 
-    output_folder = 'musica4'
+    output_folder = 'musica'
     os.makedirs(output_folder, exist_ok=True)
 
     print(f"🎵 Se encontraron {len(urls)} enlace(s) para descargar.")
